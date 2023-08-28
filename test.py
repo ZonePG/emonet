@@ -19,14 +19,18 @@ torch.backends.cudnn.benchmark =  True
 #Parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--nclasses', type=int, default=8, choices=[5,8], help='Number of emotional classes to test the model on. Please use 5 or 8.')
+parser.add_argument('--batch_size', type=int, default=32)
+parser.add_argument('--n_workers', type=int, default=16)
+parser.add_argument('--device', type=str, default='cuda:0')
+parser.add_argument('--image_size', type=int, default=256)
 args = parser.parse_args()
 
 # Parameters of the experiments
 n_expression = args.nclasses
-batch_size = 32
-n_workers = 16
-device = 'cuda:0'
-image_size = 256
+batch_size = args.batch_size
+n_workers = args.n_workers
+device = args.device
+image_size = args.image_size
 subset = 'test'
 metrics_valence_arousal = {'CCC':CCC, 'PCC':PCC, 'RMSE':RMSE, 'SAGR':SAGR}
 metrics_expression = {'ACC':ACC}
@@ -41,10 +45,10 @@ transform_image_shape_flip = DataAugmentor(image_size, image_size, mirror=True, 
 print(f'Testing the model on {n_expression} emotional classes')
 
 print('Loading the data')
-test_dataset_no_flip = AffectNet(root_path='~/datasets/new_affectnet/', subset=subset, n_expression=n_expression,
+test_dataset_no_flip = AffectNet(root_path='~/datasets/affectnet/', subset=subset, n_expression=n_expression,
                          transform_image_shape=transform_image_shape_no_flip, transform_image=transform_image)
 
-test_dataset_flip = AffectNet(root_path='~/datasets/new_affectnet/', subset=subset, n_expression=n_expression,
+test_dataset_flip = AffectNet(root_path='~/datasets/affectnet/', subset=subset, n_expression=n_expression,
                          transform_image_shape=transform_image_shape_flip, transform_image=transform_image)
 
 test_dataloader_no_flip = DataLoader(test_dataset_no_flip, batch_size=batch_size, shuffle=False, num_workers=n_workers)

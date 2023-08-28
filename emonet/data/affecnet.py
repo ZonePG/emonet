@@ -16,7 +16,7 @@ class AffectNet(Dataset):
                  n_expression=5, verbose=1, cleaned_set=True):
         self.root_path = Path(root_path).expanduser()
         self.subset = subset
-        self.image_path = self.root_path.joinpath(subset)
+        self.image_path = self.root_path.joinpath('Manually_Annotated_Images')
         self.transform_image_shape = transform_image_shape
         self.transform_image = transform_image
         self.verbose = verbose

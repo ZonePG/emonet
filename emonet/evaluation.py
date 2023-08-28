@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from tqdm import tqdm
 
 def evaluate_metrics(ground_truth, predictions, metrics, verbose=True, print_tex=True):
     results = {}
@@ -98,7 +99,7 @@ def evaluate_flip(net, dataloader_no_flip, dataloader_flip, device, metrics_vale
     net.eval()
 
     #Loop without flip
-    for index, data in enumerate(dataloader_no_flip):
+    for index, data in enumerate(tqdm(dataloader_no_flip)):
         images = data['image'].to(device)
         valence = data.get('valence', None)
         arousal = data.get('arousal', None)
@@ -146,7 +147,7 @@ def evaluate_flip(net, dataloader_no_flip, dataloader_flip, device, metrics_vale
 
     #Loop with flip
     n_images = 0
-    for index, data in enumerate(dataloader_flip):
+    for index, data in enumerate(tqdm(dataloader_flip)):
         images = data['image'].to(device)
         valence = data.get('valence', None)
         arousal = data.get('arousal', None)
